@@ -9,4 +9,5 @@ data Expr
   = Lit Double | Positive Expr | Negative Expr
   | Add Expr Expr | Sub Expr Expr
   | Mul Expr Expr | Div Expr Expr | Pow Expr Expr
+  | FloorDiv Expr Expr | Mod Expr Expr
   deriving (Eq, Show)
