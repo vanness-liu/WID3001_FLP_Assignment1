@@ -1,6 +1,6 @@
 # WID3001 Functional and Logic Programming: Assignment 1
 
-Arithmetic Expression Evaluator, written in Haskell.
+Arithmetic Expression Evaluator in Haskell.
 
 Course: WID3001 Functional and Logic Programming, Semester 1, 2026/2027
 Due date: 10 November 2026
@@ -34,3 +34,10 @@ Then try some expressions:
 
 - `Evaluator.hs`: the expression evaluator
 - `Assignment 1.pdf`: the assignment brief
+
+## Group Members
+|No.|Name|Matric Number|
+|---|----|-------------|
+|1.|Matthewdass A/L Sandanadass|23004906|
+|2.|Ong Zhao Qian|23004986|
+|3.|Vanness Liu Chuen Wei|23005021|
