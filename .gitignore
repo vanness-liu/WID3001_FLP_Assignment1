@@ -1,0 +1,28 @@
+# Haskell build artifacts
+*.hi
+*.o
+*.dyn_hi
+*.dyn_o
+*.prof
+*.hp
+*.aux
+*.chi
+*.chs.h
+dist/
+dist-newstyle/
+.stack-work/
+.cabal-sandbox/
+cabal.sandbox.config
+.ghc.environment.*
+
+# Compiled executables
+Main
+Evaluator
+
+# Editor and OS files
+.vscode/
+.idea/
+.DS_Store
+
+# Submission archives
+*.zip
