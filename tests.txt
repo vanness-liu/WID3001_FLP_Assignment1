@@ -1,0 +1,133 @@
+WID3001 Assignment 1 Test Log
+
+Run with: ghci Evaluator.hs, then evaluate "<input>"
+Before is from the original code (tag: original). Fill in After once fixes are merged.
+
+
+Bug 1: Unary minus with power (A, Parser.hs)
+
+Input            | Expected                      | Before                     | After
+"-4 ** 2"        | Right (-16.0)                 | Right 16.0                 |
+"-6 ** -4"       | Right (-7.716049382716049e-4) | Right 7.716049382716049e-4 |
+"-2 ** 3"        | Right (-8.0)                  | Right (-8.0)               |
+"-2 ** 2 ** 2"   | Right (-16.0)                 | Right 16.0                 |
+"2 ** -2 ** 2"   | Right 6.25e-2                 | Right 6.25e-2              |
+
+Odd exponents look right by accident. "2 ** -2 ** 2" is only right because bugs 1 and 2 cancel out, recheck after both fixes.
+
+
+Bug 2: Power associativity (A, Parser.hs)
+
+Input               | Expected      | Before        | After
+"2 ** 3 ** 2"       | Right 512.0   | Right 64.0    |
+"2 ** 3**2"         | Right 512.0   | Right 64.0    |
+"2 ** 2 ** 3"       | Right 256.0   | Right 64.0    |
+"2 ** 2 ** 3 / 4"   | Right 64.0    | Right 16.0    |
+
+
+Bug 3: Infinity and NaN returned as answers (B, Eval.hs)
+
+Input              | Expected     | Before          | After
+"0 ** -1"          | Left (error) | Right Infinity  |
+"(-8) ** (1/3)"    | Left (error) | Right NaN       |
+"2 ** 10000"       | Left (error) | Right Infinity  |
+
+
+Bug 4: Division by zero cutoff (B, Eval.hs)
+
+Input                            | Expected                  | Before                    | After
+"2 / 0.0000000002"               | Right 1.0e10              | Left "Division by zero"   |
+"2 / 0.000000002"                | Right 9.999999999999999e8 | Right 9.999999999999999e8 |
+"1 / 0"                          | Left "Division by zero"   | Left "Division by zero"   |
+"0 / 0"                          | Left "Division by zero"   | Left "Division by zero"   |
+"1 / (2 - 2)"                    | Left "Division by zero"   | Left "Division by zero"   |
+"((1 + 2) * (3 + 4)) / (5 - 5)"  | Left "Division by zero"   | Left "Division by zero"   |
+
+The last four should still be errors after the fix.
+
+
+Bug 5: Leftover input ignored (C, Evaluator.hs)
+
+Input            | Expected       | Before       | After
+"3.4 (/2)"       | Left (error)   | Right 3.4    |
+"1 2"            | Left (error)   | Right 1.0    |
+"(1+2)(3)"       | Left (error)   | Right 3.0    |
+"(1 + 2) (3)"    | Left (error)   | Right 3.0    |
+"2(3)"           | Left (error)   | Right 2.0    |
+"(2) 3"          | Left (error)   | Right 2.0    |
+"2 + 3)"         | Left (error)   | Right 5.0    |
+
+
+Part 2: // and % (A parsing, B evaluation)
+
+Input                   | Expected       | Before          | After
+"5 // 2"                | Right 2.0      | Right 5.0       |
+"4 // 2"                | Right 2.0      | Right 4.0       |
+"-7 // 3"               | Right (-3.0)   | Right (-7.0)    |
+"-7 % 3"                | Right 2.0      | Right (-7.0)    |
+"7 % 3"                 | Right 1.0      | Right 7.0       |
+"7 // -2"               | Right (-4.0)   | Right 7.0       |
+"7 % -2"                | Right (-1.0)   | Right 7.0       |
+"1 + 2 * 4 // 3 % 2"    | Right 1.0      | Right 9.0       |
+"5 // 0"                | Left (error)   | Right 5.0       |
+"5 % 0"                 | Left (error)   | Right 5.0       |
+"4 // / 2"              | Left (error)   | Right 4.0       |
+"4 / / 2"               | Left (error)   | Left "Expected a number or '('" |
+
+Once bug 5 is fixed but before Part 2 is merged, these will show errors. That is expected.
+
+
+Already correct (should not change)
+
+Input                         | Result
+"2 + 3 * 4"                   | Right 14.0
+"(2 + 3) * 4"                 | Right 20.0
+"-3 * (4 + 5.5)"              | Right (-28.5)
+"10 - 4 - 3"                  | Right 3.0
+"100 / 10 / 5"                | Right 2.0
+"8 / 2 * 4"                   | Right 16.0
+"2 - 3 + 4"                   | Right 3.0
+"1 - 2 - 3 - 4 - 5"           | Right (-13.0)
+"--5"                         | Right 5.0
+"-(-3)"                       | Right 3.0
+"2 * -3"                      | Right (-6.0)
+"2 - -3"                      | Right 5.0
+"2 + +3"                      | Right 5.0
+"-(2 + 3) * -(4 - 1)"         | Right 15.0
+"(-2) ** 2"                   | Right 4.0
+"2 ** -1"                     | Right 0.5
+"0 ** 0"                      | Right 1.0
+"((2))"                       | Right 2.0
+"2 * (3 + 4) ** 2 / 7 - 1"    | Right 13.0
+"007"                         | Right 7.0
+"2 *\t3"                      | Right 6.0
+"2 * 3 "                      | Right 6.0
+" 2 * 3"                      | Right 6.0
+"2\n+ 3"                      | Right 5.0
+"100000000000000000000000000000000000000000000000000000000 * 10000000000000000000"
+                              | Right 1.0000000000000001e75
+"()"                          | Left "Expected a number or '('"
+"(2 + 3"                      | Left "Missing closing parenthesis"
+""                            | Left "Expected a number or '('"
+"   "                         | Left "Expected a number or '('"
+"*3"                          | Left "Expected a number or '('"
+"3 *"                         | Left "Expected a number or '('"
+"2 * * 3"                     | Left "Expected a number or '('"
+"2 + * 3"                     | Left "Expected a number or '('"
+"2 ** ** 3"                   | Left "Expected a number or '('"
+"1.5.2"                       | Left "Unexpected character: ."
+"abc"                         | Left "Unexpected character: a"
+"2 x 3"                       | Left "Unexpected character: x"
+"2 $ 3"                       | Left "Unexpected character: $"
+
+
+Not bugs
+
+Input                      | Result                          | Why
+".5"                       | Left "Unexpected character: ."  | needs a digit before the dot
+"5."                       | Left "Unexpected character: ."  | needs a digit after the dot
+"0.1 + 0.2"                | Right 0.30000000000000004       | floating point rounding
+"2 ** 0.5 * 2 ** 0.5"      | Right 2.0000000000000004        | floating point rounding
+"99999999999999999999 + 1" | Right 1.0e20                    | Double precision limit
+"0 * -1"                   | Right (-0.0)                    | negative zero, equal to 0
+"-0"                       | Right (-0.0)                    | negative zero, equal to 0
