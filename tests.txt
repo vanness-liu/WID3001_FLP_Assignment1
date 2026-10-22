@@ -49,13 +49,13 @@ The last four should still be errors after the fix.
 Bug 5: Leftover input ignored (C, Evaluator.hs)
 
 Input            | Expected       | Before       | After
-"3.4 (/2)"       | Left (error)   | Right 3.4    |
-"1 2"            | Left (error)   | Right 1.0    |
-"(1+2)(3)"       | Left (error)   | Right 3.0    |
-"(1 + 2) (3)"    | Left (error)   | Right 3.0    |
-"2(3)"           | Left (error)   | Right 2.0    |
-"(2) 3"          | Left (error)   | Right 2.0    |
-"2 + 3)"         | Left (error)   | Right 5.0    |
+"3.4 (/2)"       | Left (error)   | Right 3.4    | Left "Unexpected input left after a complete expression"
+"1 2"            | Left (error)   | Right 1.0    | Left "Unexpected input left after a complete expression"
+"(1+2)(3)"       | Left (error)   | Right 3.0    | Left "Unexpected input left after a complete expression"
+"(1 + 2) (3)"    | Left (error)   | Right 3.0    | Left "Unexpected input left after a complete expression"
+"2(3)"           | Left (error)   | Right 2.0    | Left "Unexpected input left after a complete expression"
+"(2) 3"          | Left (error)   | Right 2.0    | Left "Unexpected input left after a complete expression"
+"2 + 3)"         | Left (error)   | Right 5.0    | Left "Unexpected input left after a complete expression"
 
 
 Part 2: // and % (A parsing, B evaluation)
@@ -69,6 +69,8 @@ Input                   | Expected       | Before          | After
 "7 // -2"               | Right (-4.0)   | Right 7.0       |
 "7 % -2"                | Right (-1.0)   | Right 7.0       |
 "1 + 2 * 4 // 3 % 2"    | Right 1.0      | Right 9.0       |
+"7 // 2 * 3"            | Right 9.0      | Right 7.0       |
+"7 % 4 * 2"             | Right 6.0      | Right 7.0       |
 "5 // 0"                | Left (error)   | Right 5.0       |
 "5 % 0"                 | Left (error)   | Right 5.0       |
 "4 // / 2"              | Left (error)   | Right 4.0       |
