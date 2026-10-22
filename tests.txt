@@ -147,3 +147,14 @@ Input              | Result                                   | Status
 "2 *\t3"           | Right [Number 2.0,Times,Number 3.0]      | correct
 "2\n+ 3"           | Right [Number 2.0,Plus,Number 3.0]       | correct
 400 digit literal  | Right [Number Infinity]                  | passes Infinity on, B's finite check must catch it
+
+
+Bug 6: Wrong error message inside parentheses (C, Parser.hs parseAtom)
+
+Input          | Expected                                   | Before                              | After
+"(2 + 3 4)"    | Left "Unexpected input inside parentheses" | Left "Missing closing parenthesis"  | Left "Unexpected input inside parentheses"
+"((1) 2)"      | Left "Unexpected input inside parentheses" | Left "Missing closing parenthesis"  | Left "Unexpected input inside parentheses"
+"(2 + 3 4"     | Left "Unexpected input inside parentheses" | Left "Missing closing parenthesis"  | Left "Unexpected input inside parentheses"
+"(2 + 3"       | Left "Missing closing parenthesis"         | Left "Missing closing parenthesis"  | Left "Missing closing parenthesis"
+
+Different from bug 5: bug 5 ignored leftovers at the top level (wrong answer), this one gives a false error message for leftovers inside brackets.
