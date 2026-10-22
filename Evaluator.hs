@@ -8,5 +8,7 @@ import Eval
 evaluate :: String -> Either String Double
 evaluate input = do
   tokens <- tokenize input
-  (expr, _unused) <- parseExpression tokens
-  eval expr
+  (expr, unused) <- parseExpression tokens
+  case unused of
+    [] -> eval expr
+    _  -> Left "Unexpected input left after a complete expression"
