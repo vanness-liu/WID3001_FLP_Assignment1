@@ -63,5 +63,6 @@ parseAtom (Open:ts) = do
   (expr, rest) <- parseExpression ts
   case rest of
     Close:remaining -> Right (expr, remaining)
-    _               -> Left "Missing closing parenthesis"
+    []              -> Left "Missing closing parenthesis"
+    _               -> Left "Unexpected input inside parentheses"
 parseAtom _ = Left "Expected a number or '('"
