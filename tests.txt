@@ -131,3 +131,19 @@ Input                      | Result                          | Why
 "99999999999999999999 + 1" | Right 1.0e20                    | Double precision limit
 "0 * -1"                   | Right (-0.0)                    | negative zero, equal to 0
 "-0"                       | Right (-0.0)                    | negative zero, equal to 0
+
+
+Lexer checks (C, Lexer.hs), run with: ghci Lexer.hs, then tokenize "<input>"
+
+Input              | Result                                   | Status
+"4//2"             | Right [Number 4.0,FloorDivide,Number 2.0] | correct
+"4 // 2"           | Right [Number 4.0,FloorDivide,Number 2.0] | correct
+"4 / / 2"          | Right [Number 4.0,Divide,Divide,Number 2.0] | correct, two separate divides
+"7%3"              | Right [Number 7.0,Modulo,Number 3.0]     | correct
+"7 % 3"            | Right [Number 7.0,Modulo,Number 3.0]     | correct
+"-7 % 3"           | Right [Minus,Number 7.0,Modulo,Number 3.0] | correct
+"2**3"             | Right [Number 2.0,Power,Number 3.0]      | correct
+"2 * * 3"          | Right [Number 2.0,Times,Times,Number 3.0] | correct, two separate times
+"2 *\t3"           | Right [Number 2.0,Times,Number 3.0]      | correct
+"2\n+ 3"           | Right [Number 2.0,Plus,Number 3.0]       | correct
+400 digit literal  | Right [Number Infinity]                  | passes Infinity on, B's finite check must catch it
