@@ -27,26 +27,26 @@ parseSum ts = do
 
 parseProduct :: Parser
 parseProduct ts = do
-  (first, rest) <- parsePower ts
+  (first, rest) <- parseUnary ts
   continue first rest
   where
     continue lhs (Times:ts) = do
-      (rhs, rest) <- parsePower ts
+      (rhs, rest) <- parseUnary ts
       continue (Mul lhs rhs) rest
     continue lhs (Divide:ts) = do
-      (rhs, rest) <- parsePower ts
+      (rhs, rest) <- parseUnary ts
       continue (Div lhs rhs) rest
     continue lhs rest = Right (lhs, rest)
 
 parsePower :: Parser
 parsePower ts = do
-  (first, rest) <- parseUnary ts
-  continue first rest
-  where
-    continue lhs (Power:ts) = do
-      (rhs, rest) <- parseUnary ts
-      continue (Pow lhs rhs) rest
-    continue lhs rest = Right (lhs, rest)
+  (first, rest) <- parseAtom ts
+  case rest of 
+    Power:remaining -> do
+      (rhs, rest) <- parseUnary remaining
+      Right (Pow first rhs, rest)
+    _ -> Right (first, rest)
+
 
 parseUnary :: Parser
 parseUnary (Plus:ts) = do
@@ -55,7 +55,7 @@ parseUnary (Plus:ts) = do
 parseUnary (Minus:ts) = do
   (expr, rest) <- parseUnary ts
   Right (Negative expr, rest)
-parseUnary ts = parseAtom ts
+parseUnary ts = parsePower ts
 
 parseAtom :: Parser
 parseAtom (Number n:ts) = Right (Lit n, ts)
