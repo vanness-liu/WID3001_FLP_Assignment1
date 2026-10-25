@@ -7,22 +7,22 @@ Before is from the original code (tag: original). Fill in After once fixes are m
 Bug 1: Unary minus with power (A, Parser.hs)
 
 Input            | Expected                      | Before                     | After
-"-4 ** 2"        | Right (-16.0)                 | Right 16.0                 |
-"-6 ** -4"       | Right (-7.716049382716049e-4) | Right 7.716049382716049e-4 |
-"-2 ** 3"        | Right (-8.0)                  | Right (-8.0)               |
-"-2 ** 2 ** 2"   | Right (-16.0)                 | Right 16.0                 |
-"2 ** -2 ** 2"   | Right 6.25e-2                 | Right 6.25e-2              |
+"-4 ** 2"        | Right (-16.0)                 | Right 16.0                 | Right (-16.0)
+"-6 ** -4"       | Right (-7.716049382716049e-4) | Right 7.716049382716049e-4 | Right (-7.716049382716049e-4)
+"-2 ** 3"        | Right (-8.0)                  | Right (-8.0)               | Right (-8.0)
+"-2 ** 2 ** 2"   | Right (-16.0)                 | Right 16.0                 | Right (-16.0)
+"2 ** -2 ** 2"   | Right 6.25e-2                 | Right 6.25e-2              | Right 6.25e-2
 
-Odd exponents look right by accident. "2 ** -2 ** 2" is only right because bugs 1 and 2 cancel out, recheck after both fixes.
+Odd exponents look right by accident. "2 ** -2 ** 2" was only right because bugs 1 and 2 cancelled out, rechecked after both fixes and still correct.
 
 
 Bug 2: Power associativity (A, Parser.hs)
 
 Input               | Expected      | Before        | After
-"2 ** 3 ** 2"       | Right 512.0   | Right 64.0    |
-"2 ** 3**2"         | Right 512.0   | Right 64.0    |
-"2 ** 2 ** 3"       | Right 256.0   | Right 64.0    |
-"2 ** 2 ** 3 / 4"   | Right 64.0    | Right 16.0    |
+"2 ** 3 ** 2"       | Right 512.0   | Right 64.0    | Right 512.0
+"2 ** 3**2"         | Right 512.0   | Right 64.0    | Right 512.0
+"2 ** 2 ** 3"       | Right 256.0   | Right 64.0    | Right 256.0
+"2 ** 2 ** 3 / 4"   | Right 64.0    | Right 16.0    | Right 64.0
 
 
 Bug 3: Infinity and NaN returned as answers (B, Eval.hs)
