@@ -13,8 +13,8 @@ parseExpression :: Parser
 parseExpression = parseSum
 
 parseSum :: Parser
-parseSum ts = do
-  (first, rest) <- parseProduct ts
+parseSum tokens = do
+  (first, rest) <- parseProduct tokens
   continue first rest
   where
     continue lhs (Plus:ts) = do
@@ -26,8 +26,8 @@ parseSum ts = do
     continue lhs rest = Right (lhs, rest)
 
 parseProduct :: Parser
-parseProduct ts = do
-  (first, rest) <- parseUnary ts
+parseProduct tokens = do
+  (first, rest) <- parseUnary tokens
   continue first rest
   where
     continue lhs (Times:ts) = do
@@ -45,14 +45,13 @@ parseProduct ts = do
     continue lhs rest = Right (lhs, rest)
 
 parsePower :: Parser
-parsePower ts = do
-  (first, rest) <- parseAtom ts
-  case rest of 
+parsePower tokens = do
+  (first, rest) <- parseAtom tokens
+  case rest of
     Power:remaining -> do
-      (rhs, rest) <- parseUnary remaining
-      Right (Pow first rhs, rest)
+      (rhs, after) <- parseUnary remaining
+      Right (Pow first rhs, after)
     _ -> Right (first, rest)
-
 
 parseUnary :: Parser
 parseUnary (Plus:ts) = do
