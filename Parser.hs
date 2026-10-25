@@ -36,6 +36,12 @@ parseProduct ts = do
     continue lhs (Divide:ts) = do
       (rhs, rest) <- parseUnary ts
       continue (Div lhs rhs) rest
+    continue lhs (FloorDivide:ts) = do
+      (rhs, rest) <- parseUnary ts
+      continue (FloorDiv lhs rhs) rest
+    continue lhs (Modulo:ts) = do
+      (rhs, rest) <- parseUnary ts
+      continue (Mod lhs rhs) rest
     continue lhs rest = Right (lhs, rest)
 
 parsePower :: Parser
