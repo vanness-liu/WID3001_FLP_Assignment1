@@ -28,9 +28,9 @@ Input               | Expected      | Before        | After
 Bug 3: Infinity and NaN returned as answers (B, Eval.hs)
 
 Input              | Expected     | Before          | After
-"0 ** -1"          | Left (error) | Right Infinity  |
-"(-8) ** (1/3)"    | Left (error) | Right NaN       |
-"2 ** 10000"       | Left (error) | Right Infinity  |
+"0 ** -1"          | Left (error) | Right Infinity  | Left "Zero cannot be raised to a negative power"
+"(-8) ** (1/3)"    | Left (error) | Right NaN       | Left "Negative base with a non-integer exponent has no real result"
+"2 ** 10000"       | Left (error) | Right Infinity  | Left "Result is too large or not finite"
 
 
 Bug 4: Division by zero cutoff (B, Eval.hs)
@@ -148,7 +148,7 @@ Input              | Result                                   | Status
 "2 * * 3"          | Right [Number 2.0,Times,Times,Number 3.0] | correct, two separate times
 "2 *\t3"           | Right [Number 2.0,Times,Number 3.0]      | correct
 "2\n+ 3"           | Right [Number 2.0,Plus,Number 3.0]       | correct
-400 digit literal  | Right [Number Infinity]                  | passes Infinity on, B's finite check must catch it
+400 digit literal  | Right [Number Infinity]                  | passes Infinity on, B's finite check catches it: evaluate gives Left "Result is too large or not finite"
 
 
 Bug 6: Wrong error message inside parentheses (C, Parser.hs parseAtom)
