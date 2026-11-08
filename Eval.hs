@@ -16,7 +16,7 @@ eval (Pow a b) = do
   if base == 0 && power < 0
     then Left "Zero cannot be raised to a negative power"
   else if base < 0 && not (isWhole power)
-    then Left "Negative base with a non-integer exponent has no real result"
+    then Left "Negative base with a non-integer exponent is not supported"
   else checkFinite (base ** power)
 
 eval (Div a b) = do
