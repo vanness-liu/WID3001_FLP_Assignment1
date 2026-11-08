@@ -32,8 +32,17 @@ Then try some expressions:
 
 ## Files
 
-- `Evaluator.hs`: the expression evaluator
+The original single-file evaluator is split into modules. An input string flows through them in order: `Lexer` → `Parser` → `Eval`.
+
+- `Types.hs`: shared `Token` and `Expr` data types
+- `Lexer.hs`: stage 1, `tokenize` turns the input string into tokens
+- `Parser.hs`: stage 2, builds an expression tree with the correct precedence and associativity
+- `Eval.hs`: stage 3, `eval` computes the result, returning `Left` errors instead of Infinity or NaN
+- `Evaluator.hs`: public `evaluate` function that joins the three stages and rejects leftover input
+- `tests.txt`: shared test log with expected, before and after results for each bug
 - `Assignment 1.pdf`: the assignment brief
+
+The original code is kept at the git tag `original`.
 
 ## Group Members
 |No.|Name|Matric Number|
