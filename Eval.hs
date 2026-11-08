@@ -22,9 +22,9 @@ eval (Pow a b) = do
 eval (Div a b) = do
   numerator <- eval a
   denominator <- eval b
-  if abs denominator < 1e-9
+  if abs denominator == 0
      then Left "Division by zero"
-     else Right (numerator / denominator)
+     else checkFinite (numerator / denominator)
 
 binary :: (Double -> Double -> Double) -> Expr -> Expr -> Either String Double
 binary op a b = do
