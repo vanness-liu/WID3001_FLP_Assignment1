@@ -26,6 +26,9 @@ eval (Div a b) = do
      then Left "Division by zero"
      else checkFinite (numerator / denominator)
 
+eval (FloorDiv a b) = integerOp "Floor division by zero" div a b
+eval (Mod a b) = integerOp "Modulo by zero" mod a b
+
 binary :: (Double -> Double -> Double) -> Expr -> Expr -> Either String Double
 binary op a b = do
   x <- eval a
@@ -40,4 +43,15 @@ checkFinite r
   | isNaN r      = Left "Result is not a number"
   | isInfinite r = Left "Result is too large or not finite"
   | otherwise    = Right r
+
+integerOp :: String -> (Integer -> Integer -> Integer)
+          -> Expr -> Expr -> Either String Double
+integerOp zeroMessage op a b = do
+  x <- eval a
+  y <- eval b
+  if not (isWhole x && isWhole y)
+    then Left "// and % require whole-number operands"
+  else if y == 0
+    then Left zeroMessage
+  else Right (fromInteger (truncate x `op` truncate y))
 

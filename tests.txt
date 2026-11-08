@@ -61,21 +61,26 @@ Input            | Expected       | Before       | After
 Part 2: // and % (A parsing, B evaluation)
 
 Input                   | Expected       | Before          | After
-"5 // 2"                | Right 2.0      | Right 5.0       |
-"4 // 2"                | Right 2.0      | Right 4.0       |
-"-7 // 3"               | Right (-3.0)   | Right (-7.0)    |
-"-7 % 3"                | Right 2.0      | Right (-7.0)    |
-"7 % 3"                 | Right 1.0      | Right 7.0       |
-"7 // -2"               | Right (-4.0)   | Right 7.0       |
-"7 % -2"                | Right (-1.0)   | Right 7.0       |
-"1 + 2 * 4 // 3 % 2"    | Right 1.0      | Right 9.0       |
-"7 // 2 * 3"            | Right 9.0      | Right 7.0       |
-"7 % 4 * 2"             | Right 6.0      | Right 7.0       |
-"5 // 0"                | Left (error)   | Right 5.0       |
-"5 % 0"                 | Left (error)   | Right 5.0       |
-"4 // / 2"              | Left (error)   | Right 4.0       |
-"4 / / 2"               | Left (error)   | Left "Expected a number or '('" |
+"5 // 2"                | Right 2.0      | Right 5.0       | Right 2.0
+"4 // 2"                | Right 2.0      | Right 4.0       | Right 2.0
+"-7 // 3"               | Right (-3.0)   | Right (-7.0)    | Right (-3.0)
+"-7 % 3"                | Right 2.0      | Right (-7.0)    | Right 2.0
+"7 % 3"                 | Right 1.0      | Right 7.0       | Right 1.0
+"7 // -2"               | Right (-4.0)   | Right 7.0       | Right (-4.0)
+"7 % -2"                | Right (-1.0)   | Right 7.0       | Right (-1.0)
+"1 + 2 * 4 // 3 % 2"    | Right 1.0      | Right 9.0       | Right 1.0
+"7 // 2 * 3"            | Right 9.0      | Right 7.0       | Right 9.0
+"7 % 4 * 2"             | Right 6.0      | Right 7.0       | Right 6.0
+"5 // 0"                | Left (error)   | Right 5.0       | Left "Floor division by zero"
+"5 % 0"                 | Left (error)   | Right 5.0       | Left "Modulo by zero"
+"4 // / 2"              | Left (error)   | Right 4.0       | Left "Expected a number or '('"
+"4 / / 2"               | Left (error)   | Left "Expected a number or '('" | Left "Expected a number or '('"
+"-7 // -3"              | Right 2.0      | Right (-7.0)    | Right 2.0
+"-7 % -3"               | Right (-1.0)   | Right (-7.0)    | Right (-1.0)
+"5.5 // 2"              | Left (error)   | Right 5.5       | Left "// and % require whole-number operands"
+"5 % 1.5"               | Left (error)   | Right 5.0       | Left "// and % require whole-number operands"
 
+// and % are integer operations, so operands with a fractional part are rejected.
 Once bug 5 is fixed but before Part 2 is merged, these will show errors. That is expected.
 
 
