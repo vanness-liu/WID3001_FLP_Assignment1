@@ -29,6 +29,18 @@ Then try some expressions:
     evaluate "2 + 3 * 4"
     evaluate "(2 + 3) * 4"
     evaluate "-3 * (4 + 5.5)"
+    evaluate "-7 // 3"
+    evaluate "-7 % 3"
+
+Results are `Right` with the answer, or `Left` with an error message:
+
+    evaluate "2 ** 3 ** 2"    -- Right 512.0
+    evaluate "-7 // 3"        -- Right (-3.0)
+    evaluate "-7 % 3"         -- Right 2.0
+    evaluate "5 // 0"         -- Left "Floor division by zero"
+    evaluate "1 2"            -- Left "Unexpected input left after a complete expression"
+
+`//` and `%` are integer operations: they round down (towards negative infinity) and reject operands with a fractional part, such as `5.5 // 2`.
 
 ## Files
 
